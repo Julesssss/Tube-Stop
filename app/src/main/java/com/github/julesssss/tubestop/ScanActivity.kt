@@ -19,8 +19,18 @@ class ScanActivity : Activity() {
     }
 
     private fun attemptScan() {
-        // test extensions
-        toast("FAB clicked")
-        log("FAB clicked")
+        log("attemptScan")
+
+        // check permission
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!=
+                PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION) ,0)
+        } else {
+            wifiManager.startScan()
+        }
+
     }
+
+
 }
