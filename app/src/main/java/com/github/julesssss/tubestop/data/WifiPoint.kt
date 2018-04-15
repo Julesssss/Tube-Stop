@@ -14,4 +14,6 @@ class WifiPoint() {
 
     var timestamp: Long = 0
 
+    var station: String = ""
+
 }

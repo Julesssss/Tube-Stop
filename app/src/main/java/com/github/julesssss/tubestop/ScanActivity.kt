@@ -42,6 +42,7 @@ class ScanActivity : Activity() {
                     wifiPoint.bssid = it.BSSID
                     wifiPoint.ssid = it.SSID
                     wifiPoint.timestamp = it.timestamp
+                    wifiPoint.station = selectedStation
                     wifiPoints.add(wifiPoint)
                 }
 
