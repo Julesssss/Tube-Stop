@@ -37,6 +37,7 @@ class ScanActivity : Activity() {
                 val scanResults = wifiManager.scanResults
 
                 val wifiPoints = mutableListOf<WifiPoint>()
+
                 scanResults.map {
                     val wifiPoint = WifiPoint()
                     wifiPoint.bssid = it.BSSID
@@ -47,11 +48,8 @@ class ScanActivity : Activity() {
                 }
 
                 dao.insertWifiPoints(wifiPoints)
-                val totalPoints = dao.findAllWifiPoints().size
-                val allForStation = dao.findWifiPointsForStation(selectedStation)
-
-                textResults.text = "${wifiPoints.size} from scan\n${allForStation.size} for current station\n$totalPoints in database"
-                toast("Found wifi networks -> ${scanResults.map { ", ${it.SSID}" }}")
+                displayDatabaseInformation()
+                toast("${wifiPoints.size} found, networks ssid's -> ${scanResults.map { ", ${it.SSID}" }}")
             }
         }
     }
@@ -77,6 +75,13 @@ class ScanActivity : Activity() {
         setupStationArray()
     }
 
+    private fun displayDatabaseInformation() {
+        val totalPoints = dao.findAllWifiPoints().size
+        val allForStation = dao.findWifiPointsForStation(selectedStation)
+
+        textResults.text = "${allForStation.size} for current station\n$totalPoints in database"
+    }
+
     private fun setupStationArray() {
         stationAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.northern_line, android.R.layout.simple_spinner_dropdown_item)
         spinnerStations.adapter = stationAdapter
@@ -91,6 +96,7 @@ class ScanActivity : Activity() {
     private fun onStationSelected(position: Int) {
         val stationArray = resources.getStringArray(R.array.northern_line)
         selectedStation = stationArray[position]
+        displayDatabaseInformation()
         toast("Selected: $selectedStation")
     }
 
