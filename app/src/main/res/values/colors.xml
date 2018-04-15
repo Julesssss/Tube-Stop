@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="victoria">#1D9EE0</color>
+    <color name="central">#DB2825</color>
+    <color name="district">#106E2E</color>
+    <color name="metropoliton">#781156</color>
+    <color name="picadilly">#0522AB</color>
+
+
+    <color name="tube_red">#cd343a</color>
+    <color name="tube_blue">#04128E</color>
+
 </resources>
