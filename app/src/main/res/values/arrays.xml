@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="northern_line">
+        <item>Angel</item>
+        <item>Archway</item>
+        <item>Balham</item>
+        <item>Bank</item>
+        <item>Belsize Park</item>
+        <item>Borough</item>
+        <item>Brent Cross </item>
+        <item>Burnt Oak </item>
+        <item>Camden Town</item>
+        <item>Chalk Farm</item>
+        <item>Charing Cross</item>
+        <item>Clapham Common</item>
+        <item>Clapham North</item>
+        <item>Clapham South</item>
+        <item>Colindale</item>
+        <item>Colliers Wood</item>
+        <item>East Finchley</item>
+        <item>Edgware</item>
+        <item>Elephant &amp; Castle</item>
+        <item>Embankment</item>
+        <item>Euston</item>
+        <item>Finchley Central  </item>
+        <item>Golders Green</item>
+        <item>Goodge Street</item>
+        <item>Hampstead</item>
+        <item>Hendon Central</item>
+        <item>High Barnet</item>
+        <item>Highgate</item>
+        <item>Kennington</item>
+        <item>Kentish Town</item>
+        <item>King's Cross St. Pancras</item>
+        <item>Leicester Square</item>
+        <item>London Bridge</item>
+        <item>Mill Hill East</item>
+        <item>Moorgate</item>
+        <item>Morden</item>
+        <item>Mornington Crescent</item>
+        <item>Old Street</item>
+        <item>Oval</item>
+        <item>South Wimbledon</item>
+        <item>Stockwell</item>
+        <item>Tooting Bec</item>
+        <item>Tooting Broadway</item>
+        <item>Tottenham Court Road</item>
+        <item>Totteridge &amp; Whetstone</item>
+        <item>Tufnell Park</item>
+        <item>Warren Street</item>
+        <item>Waterloo</item>
+        <item>West Finchley</item>
+        <item>Woodside Park</item>
+    </string-array>
+
+</resources>

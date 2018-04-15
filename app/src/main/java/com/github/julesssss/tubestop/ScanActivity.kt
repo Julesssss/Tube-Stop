@@ -13,6 +13,9 @@ import android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.github.julesssss.tubestop.data.AppDatabase
 import com.github.julesssss.tubestop.data.WifiPoint
 import com.github.julesssss.tubestop.data.WifiPointDao
@@ -25,6 +28,8 @@ class ScanActivity : Activity() {
     private lateinit var wifiManager: WifiManager
     private lateinit var db: AppDatabase
     private lateinit var dao: WifiPointDao
+    private lateinit var stationAdapter: ArrayAdapter<CharSequence>
+    private lateinit var selectedStation: String
 
     private val wifiScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -67,6 +72,25 @@ class ScanActivity : Activity() {
         fab.setOnClickListener {
             attemptScan()
         }
+
+        setupStationArray()
+    }
+
+    private fun setupStationArray() {
+        stationAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.northern_line, android.R.layout.simple_spinner_dropdown_item)
+        spinnerStations.adapter = stationAdapter
+        spinnerStations.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                onStationSelected(position)
+            }
+        }
+    }
+
+    private fun onStationSelected(position: Int) {
+        val stationArray = resources.getStringArray(R.array.northern_line)
+        selectedStation = stationArray[position]
+        toast("Selected: $selectedStation")
     }
 
     private fun attemptScan() {
