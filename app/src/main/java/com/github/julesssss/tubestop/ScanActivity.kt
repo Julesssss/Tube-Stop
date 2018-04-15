@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION
 import android.os.Bundle
@@ -34,22 +35,12 @@ class ScanActivity : Activity() {
     private val wifiScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
-                val scanResults = wifiManager.scanResults
 
-                val wifiPoints = mutableListOf<WifiPoint>()
-
-                scanResults.map {
-                    val wifiPoint = WifiPoint()
-                    wifiPoint.bssid = it.BSSID
-                    wifiPoint.ssid = it.SSID
-                    wifiPoint.timestamp = it.timestamp
-                    wifiPoint.station = selectedStation
-                    wifiPoints.add(wifiPoint)
+                if (switchDetectCurrentStation.isChecked) {
+                    detectCurrentStation(wifiManager.scanResults)
+                } else {
+                    saveResultsToDatabase(wifiManager.scanResults)
                 }
-
-                dao.insertWifiPoints(wifiPoints)
-                displayDatabaseInformation()
-                toast("${wifiPoints.size} found, networks ssid's -> ${scanResults.map { ", ${it.SSID}" }}")
             }
         }
     }
@@ -73,6 +64,28 @@ class ScanActivity : Activity() {
         }
 
         setupStationArray()
+    }
+
+    private fun saveResultsToDatabase(scanResults: List<ScanResult>) {
+        val wifiPoints = mutableListOf<WifiPoint>()
+
+        scanResults.map {
+            val wifiPoint = WifiPoint()
+            wifiPoint.bssid = it.BSSID
+            wifiPoint.ssid = it.SSID
+            wifiPoint.timestamp = it.timestamp
+            wifiPoint.station = selectedStation
+            wifiPoints.add(wifiPoint)
+        }
+
+        dao.insertWifiPoints(wifiPoints)
+        displayDatabaseInformation()
+        toast("${wifiPoints.size} found, networks ssid's -> ${scanResults.map { ", ${it.SSID}" }}")
+    }
+
+    private fun detectCurrentStation(scanResults: MutableList<ScanResult>) {
+        val matchingPoints = dao.findWifiPoints(scanResults.map { it.BSSID })
+        toast("${matchingPoints.map { it.station }}")
     }
 
     private fun displayDatabaseInformation() {
