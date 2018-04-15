@@ -11,6 +11,9 @@ interface WifiPointDao {
     @Query("SELECT * FROM wifi_points")
     fun findAllWifiPoints(): List<WifiPoint>
 
+    @Query("SELECT * FROM wifi_points WHERE station == :station")
+    fun findWifiPointsForStation(station: String): List<WifiPoint>
+
     @Query("SELECT * FROM wifi_points WHERE bssid == :bssid")
     fun findWifiPoint(bssid: String): WifiPoint
 

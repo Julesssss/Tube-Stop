@@ -47,11 +47,11 @@ class ScanActivity : Activity() {
                 }
 
                 dao.insertWifiPoints(wifiPoints)
+                val totalPoints = dao.findAllWifiPoints().size
+                val allForStation = dao.findWifiPointsForStation(selectedStation)
 
-                toast("Found wifi networks -> ${scanResults.map {", ${it.SSID}" }}")
-                scanResults.map {
-                    log(it.toString())
-                }
+                textResults.text = "${wifiPoints.size} from scan\n${allForStation.size} for current station\n$totalPoints in database"
+                toast("Found wifi networks -> ${scanResults.map { ", ${it.SSID}" }}")
             }
         }
     }
@@ -104,11 +104,6 @@ class ScanActivity : Activity() {
         } else {
             wifiManager.startScan()
         }
-
-        val points = dao.findAllWifiPoints()
-
-        toast("${points.size} saved points ")
-
     }
 
 

@@ -43,6 +43,27 @@
         app:layout_constraintTop_toBottomOf="@id/textSpinnerTitle"
         tools:listitem="@android:layout/simple_spinner_item" />
 
+    <TextView
+        android:id="@+id/textTitleResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Results"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/spinnerStations" />
+
+    <TextView
+        android:id="@+id/textResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="10 found\n15 total for station"
+        app:layout_constraintTop_toBottomOf="@id/textTitleResults" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
