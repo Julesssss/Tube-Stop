@@ -23,43 +23,53 @@ import com.github.julesssss.tubestop.data.WifiPoint
 import com.github.julesssss.tubestop.data.WifiPointDao
 import com.github.julesssss.tubestop.extensions.log
 import com.github.julesssss.tubestop.extensions.toast
+import com.github.julesssss.tubestop.util.CsvReader
+import com.github.julesssss.tubestop.util.sqlAsset.AssetSQLiteOpenHelperFactory
 import kotlinx.android.synthetic.main.activity_scan.*
 
 class ScanActivity : Activity() {
 
+    private lateinit var wifiManager: WifiManager
     private lateinit var db: AppDatabase
     private lateinit var dao: WifiPointDao
     private lateinit var stationAdapter: ArrayAdapter<CharSequence>
     private lateinit var selectedStation: String
 
-//    private val wifiScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context?, intent: Intent?) {
-//            if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
-//
-//                if (switchDetectCurrentStation.isChecked) {
-//                    detectCurrentStation(wifiManager.scanResults)
-//                } else {
-//                    saveResultsToDatabase(wifiManager.scanResults)
-//                }
-//            }
-//        }
-//    }
+    private val wifiScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
+
+//                val scanResults = wifiManager.scanResults
+                val scanResult = listOf("a4:56:30:cc:7a:40", "c8:f9:f9:a7:87:70", "2c:36:f8:b9:56:e0",
+                        "c8:f9:f9:5b:9e:90", "3c:ce:73:70:64:20", "3c:ce:73:f6:d2:c0", "3c:ce:73:70:6b:e0",
+                        "c8:f9:f9:72:3b:c0", "3c:ce:73:f6:a2:70", "c8:f9:f9:28:ea:40", "c8:f9:f9:5b:ac:30")
+
+                detectCurrentStation(scanResult)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
 
-        db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "wifi_points")
-                .allowMainThreadQueries()
+        // Use prebuilt database, refactor to class
+        db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "wifi_points_from_device.db")
+                .openHelperFactory(AssetSQLiteOpenHelperFactory())
+                .allowMainThreadQueries() // todo: make asynchronous wth RxJava
                 .build()
         dao = db.wifiPointDao()
 
         // WiFi scanning setup
-
+        wifiManager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        registerReceiver(wifiScanReceiver, IntentFilter(SCAN_RESULTS_AVAILABLE_ACTION))
 
         // basic Button For searching
         fab.setOnClickListener {
             attemptScan()
+
+//            val wifiPoints = CsvReader().getWifiPointsFromCSV(this.applicationContext)
+//            dao.insertWifiPoints(wifiPoints)
         }
 
         setupStationArray()
@@ -71,8 +81,6 @@ class ScanActivity : Activity() {
         scanResults.map {
             val wifiPoint = WifiPoint()
             wifiPoint.bssid = it.BSSID
-            wifiPoint.ssid = it.SSID
-            wifiPoint.timestamp = it.timestamp
             wifiPoint.station = selectedStation
             wifiPoints.add(wifiPoint)
         }
@@ -82,8 +90,11 @@ class ScanActivity : Activity() {
         toast("${wifiPoints.size} found, networks ssid's -> ${scanResults.map { ", ${it.SSID}" }}")
     }
 
-    private fun detectCurrentStation(scanResults: MutableList<ScanResult>) {
-        val matchingPoints = dao.findWifiPoints(scanResults.map { it.BSSID })
+    private fun detectCurrentStation(scanResults: List<String>) {
+        val matchingPoints = dao.findWifiPoints(scanResults)
+
+
+
         toast("${matchingPoints.map { it.station }}")
     }
 
@@ -95,18 +106,18 @@ class ScanActivity : Activity() {
     }
 
     private fun setupStationArray() {
-        stationAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.northern_line, android.R.layout.simple_spinner_dropdown_item)
+        stationAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.victoria_line, android.R.layout.simple_spinner_dropdown_item)
         spinnerStations.adapter = stationAdapter
         spinnerStations.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 onStationSelected(position)
             }
         }
     }
 
     private fun onStationSelected(position: Int) {
-        val stationArray = resources.getStringArray(R.array.northern_line)
+        val stationArray = resources.getStringArray(R.array.victoria_line)
         selectedStation = stationArray[position]
         displayDatabaseInformation()
         toast("Selected: $selectedStation")

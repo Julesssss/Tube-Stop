@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="northern_line">
+    <string-array name="victoria_line">
+        <item>Brixton</item>
+        <item>Stockwell</item>
+        <item>Vauxhall</item>
+        <item>Victoria</item>
+        <item>Green Park</item>
+    </string-array>
+
+        <string-array name="northern_line">
         <item>Angel</item>
         <item>Archway</item>
         <item>Balham</item>
