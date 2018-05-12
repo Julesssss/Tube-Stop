@@ -1,4 +1,4 @@
-package com.github.julesssss.tubestop
+package com.github.julesssss.tubestop.view
 
 import android.Manifest
 import android.app.Activity
@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.github.julesssss.tubestop.R
 import com.github.julesssss.tubestop.data.AppDatabase
 import com.github.julesssss.tubestop.data.WifiPoint
 import com.github.julesssss.tubestop.data.WifiPointDao
@@ -26,24 +27,23 @@ import kotlinx.android.synthetic.main.activity_scan.*
 
 class ScanActivity : Activity() {
 
-    private lateinit var wifiManager: WifiManager
     private lateinit var db: AppDatabase
     private lateinit var dao: WifiPointDao
     private lateinit var stationAdapter: ArrayAdapter<CharSequence>
     private lateinit var selectedStation: String
 
-    private val wifiScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
-
-                if (switchDetectCurrentStation.isChecked) {
-                    detectCurrentStation(wifiManager.scanResults)
-                } else {
-                    saveResultsToDatabase(wifiManager.scanResults)
-                }
-            }
-        }
-    }
+//    private val wifiScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context?, intent: Intent?) {
+//            if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
+//
+//                if (switchDetectCurrentStation.isChecked) {
+//                    detectCurrentStation(wifiManager.scanResults)
+//                } else {
+//                    saveResultsToDatabase(wifiManager.scanResults)
+//                }
+//            }
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +55,7 @@ class ScanActivity : Activity() {
         dao = db.wifiPointDao()
 
         // WiFi scanning setup
-        wifiManager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        registerReceiver(wifiScanReceiver, IntentFilter(SCAN_RESULTS_AVAILABLE_ACTION))
+
 
         // basic Button For searching
         fab.setOnClickListener {
