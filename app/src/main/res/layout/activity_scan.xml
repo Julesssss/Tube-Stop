@@ -36,7 +36,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Northern Line"
+        android:text="Test Station"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
@@ -71,18 +71,6 @@
         android:layout_marginTop="16dp"
         android:text="10 found\n15 total for station"
         app:layout_constraintTop_toBottomOf="@id/textTitleResults" />
-
-    <Switch
-        android:id="@+id/switchDetectCurrentStation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:switchPadding="8dp"
-        android:text="Detect station mode"
-        app:layout_constraintBottom_toBottomOf="@id/fab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fab" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
